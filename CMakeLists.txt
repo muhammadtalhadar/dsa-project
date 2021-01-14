@@ -3,4 +3,4 @@ project(dsa_project)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(dsa_project main.cpp)
+add_executable(dsa_project main.cpp Node.cpp Node.h RBT.cpp RBT.h)
