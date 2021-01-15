@@ -13,10 +13,13 @@ private:
 
     // declarations for recursive implementations
 
-    // inserts a value int RBT
+    /* inserts a value int RBT
+     * FIXME: Implemented without balancing.*/
     bool insert_inner( int val, Node *&node, Node*& parentNode);
 
-    // Deletes a value from RBT
+    /*
+     * Deletes a node from the RBT.
+     * FIXME: implmenented without balancing.*/
     bool deleten_inner(Node *&node, int val);
 
     // returns true if a value exists int RBT
@@ -28,8 +31,37 @@ private:
     // deletes all nodes of value greater than a give value
     bool deletegt_inner(Node *&node, int val);
 
-    // displayes the parent node of a given value
-    bool displayParent_inner(Node *node, int val);
+
+    /* *
+     * Traversals
+     * */
+
+    // The usual traversals
+    void preorder_inner(Node* node); // NLR
+    void inorder_inner(Node* node); // LNR
+    void postorder_inner(Node* node); // LRN
+
+    // Alternate forms of usual traversals
+    void altpreorder_inner(Node* node); // NRL
+    void altinorder_inner(Node* node); // RNL
+    void atlpostorder_inner(Node* node); // RLN
+
+    /* *
+     * Utility Functions
+    * */
+
+    Node* parent_inner(Node *node, int val);
+    Node* successor(Node *node, int);
+
+    // Utility functions for balancing trees
+    void recolour(Node*& parent, Node*& child, Node*& grandchild);
+    void lrotate(Node*& node); // left rotation
+    void rrotate(Node*& node); // right rotation
+
+    // Tree balancing algorithms
+    void ibalance(); // balance tree after insertion
+    void dbalance(); // balance tree after deletion
+
 
 public:
     // default constructor
@@ -51,8 +83,3 @@ public:
     //TODO: delete this later
     void tester();//this just tests shit
 };
-
-// MISC functions required by this class
-void recolour(Node*& parent, Node*& child, Node*& grandchild);
-void leftRotate(Node*& root, Node*& node);
-void rightRotate(Node*& root, Node*& node);
