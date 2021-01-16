@@ -11,25 +11,31 @@ class RBT {
 private:
     Node *root;
 
-    // declarations for recursive implementations
+    /*
+     * Declarations for recursive implementations
+     * postfix '_inner': implies that a method is a private method.
+     * parameter name '_root': implies that the root of the (sub)tree must be passed to the method as argument here.
+     * '_root' parameter generally implies that the method is a recursive one.
+     * */
 
     /* inserts a value int RBT
      * FIXME: Implemented without balancing.*/
-    bool insert_inner( int val, Node *&node, Node*& parentNode);
+    bool insert_inner(Node *&root_, int val);
 
     /*
-     * Deletes a node from the RBT.
-     * FIXME: implmenented without balancing.*/
-    bool deleten_inner(Node *&node, int val);
+     * Deletes a root_ from the RBT.
+     * FIXME: implmenented without balancing.
+     * */
+    bool deleten_inner(Node *&root_, int val);
 
     // returns true if a value exists int RBT
-    bool search_inner(Node *node, int val);
+    bool search_inner(Node *root_, int val)const;
 
     // destroys the entire RBT
-    bool destroy_inner(Node *&node);
+    bool destroy_inner(Node *&root_);
 
     // deletes all nodes of value greater than a give value
-    bool deletegt_inner(Node *&node, int val);
+    bool deletegt_inner(Node *&root_, int val);
 
 
     /* *
@@ -37,30 +43,41 @@ private:
      * */
 
     // The usual traversals
-    void preorder_inner(Node* node); // NLR
-    void inorder_inner(Node* node); // LNR
-    void postorder_inner(Node* node); // LRN
+    void preorder_inner(Node* root_)const; // NLR
+    void inorder_inner(Node* root_)const; // LNR
+    void postorder_inner(Node* root_)const; // LRN
 
     // Alternate forms of usual traversals
-    void altpreorder_inner(Node* node); // NRL
-    void altinorder_inner(Node* node); // RNL
-    void atlpostorder_inner(Node* node); // RLN
+    void altpreorder_inner(Node* root_)const; // NRL
+    void altinorder_inner(Node* root_)const; // RNL
+    void atlpostorder_inner(Node* root_)const; // RLN
 
     /* *
      * Utility Functions
     * */
 
-    Node* parent_inner(Node *node, int val);
-    Node* successor(Node *node, int);
+    Node* parent_inner(Node *root_, int val)const;
+    Node* parent(int val)const;
+    Node* successor(Node *root_, int);
 
     // Utility functions for balancing trees
-    void recolour(Node*& parent, Node*& child, Node*& grandchild);
-    void lrotate(Node*& node); // left rotation
-    void rrotate(Node*& node); // right rotation
+
+    /*
+     * 'node' is the focus of our recolouring, whose elderly and sibibling nodes will be checked for colouring.
+     * */
+    void recolour(Node* node);
+
+    /*
+     * For either rotation methods
+     * parameter 'node' is the pivot of the rotation.
+     * In parent-child relation of rotation, 'node' is the parent.
+     * */
+    void lrotate(Node* node); // left rotation
+    void rrotate(Node* node); // right rotation
 
     // Tree balancing algorithms
-    void ibalance(); // balance tree after insertion
-    void dbalance(); // balance tree after deletion
+    void ibalance(Node* node); // balance tree after insertion
+    void dbalance(Node* node); // balance tree after deletion
 
 
 public:
@@ -72,13 +89,21 @@ public:
 
     bool deleten(int val);
 
-    bool search(int val);
+    bool search(int val)const;
 
     bool destroy();
 
     bool deletegt(int val);
 
-    bool displayParent(int val);
+    bool displayParent(int val)const;
+
+    void preorder()const;
+    void inorder()const;
+    void postorder()const;
+
+    void altpreorder()const;
+    void altinorder()const;
+    void altpostorder()const;
 
     //TODO: delete this later
     void tester();//this just tests shit

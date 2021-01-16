@@ -4,7 +4,7 @@ using namespace  std;
 
 int main() {
     std::cout << "Hello, World!" << std::endl;
-    int nums[]={10,8,12,7,9};
+    int nums[]={33,13,53,41,61,11,21,15,31};
 
     RBT rbt;
 
@@ -12,8 +12,9 @@ int main() {
        rbt.insert(i);
     }
 
-    rbt.tester();
+    cout<<endl;
+    rbt.inorder();
 
-    cout<<"TEET.";
+    cout<<"\nTEET.";
     return 0;
 }

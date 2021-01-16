@@ -4,161 +4,329 @@
 
 #include "RBT.h"
 
-bool RBT::insert_inner(int val, Node *&node, Node*& parentNode) {
+bool RBT::insert_inner(Node *&root_, int val) {
 
     // base case
+    if(root==nullptr){
+        root=new Node(val, 'b', new Node(0,'b'),new Node(0,'b'));
+        return true;
+    }
+    else if(root_->data==0) {
 
-    if(node==nullptr){
+        // insert root_
+        root_->data=val;
+        root_->colour='r';
+        root_->rightChild=new Node(0,'b');
+        root_->leftChild=new Node(0,'b');
 
-        // insert node
-        node=new Node(val);
-
-        // if node inserted was at root position, set its color to black
-        // then return, since there's no balancing to be done
-        if(&node==&root){
-            node->colour='r';
-            return true;
-        }
-
-        //now, for the balancing part.
-        Node* parent=parent_inner(root, node->data);
-        if(parent->colour=='b' && parent!=root){
-            ibalance();
-        }
+        // call balancing method at point of insertion
+        ibalance(root_);
 
         return true;
     }
 
     // general case
-    if(val<node->data){
-        return insert_inner( val, node->leftChild, node);
-    }
-    else if(val>node->data){
-        return insert_inner( val, node->rightChild,node);
+    if (val < root_->data) {
+        return insert_inner(root_->leftChild, val);
+    } else if (val > root_->data) {
+        return insert_inner(root_->rightChild, val);
     }
 
     //if value was a duplicate, no no recursion will occur, and we will return without having inserted anything
     return false;
 }
 
-bool RBT::deleten_inner(Node *&node, int val) {
+bool RBT::deleten_inner(Node *&root_, int val) {
     // base case
-    if(node==nullptr) return false;
+    if (root_ == nullptr) return false;
 
-    Node* temp=nullptr;
+    Node *temp = nullptr;
     char originalColor;
+
     //positive result case
-        if(node->data==val){
-            originalColor=node->colour;
-            // when both subtrees are empty
-            if(node->leftChild==nullptr && node->rightChild== nullptr){
-                delete node;
-                node= nullptr;
-            }
-                //where left subtree is empty
-            else if(node->leftChild==nullptr){
-                temp=node->rightChild;
-                delete node;
-                node=temp;
-            }
-                //when right subtree is empty
-            else if(node->rightChild==nullptr){
-                temp=node->leftChild;
-                delete node;
-                node=temp;
-            }
-                // when neither subtree is empty
-            else{
-                Node* predecessor=node->leftChild;
-                temp=nullptr;
-
-                // locate the predecessor to node to be deleted
-                while(predecessor->rightChild!= nullptr){
-                    temp=predecessor;
-                    predecessor=predecessor->rightChild;
-                }
-
-                //update node to delete's data with predecessor's data and set propper color
-                node->data=predecessor->data;
-                node->data=originalColor;
-
-                // update predecessor's original parent and delete predecessor from it's original position.
-                if(temp==nullptr){ // incase, predecessor was node->lnode and no iteration was done
-                    node->leftChild=predecessor->leftChild;
-                }
-                else{
-                    temp->rightChild=predecessor->leftChild;
-                }
-                delete predecessor;
-            }
-
-            // now balance stuff
-            if(originalColor=='b'){
-                dbalance();
-            }
-            return true;
+    if (root_->data == val) {
+        originalColor = root_->colour;
+        // when both subtrees are empty
+        if (root_->leftChild == nullptr && root_->rightChild == nullptr) {
+            delete root_;
+            root_ = nullptr;
         }
-    return false;
-}
+            //where left subtree is empty
+        else if (root_->leftChild == nullptr) {
+            temp = root_->rightChild;
+            delete root_;
+            root_ = temp;
+        }
+            //when right subtree is empty
+        else if (root_->rightChild == nullptr) {
+            temp = root_->leftChild;
+            delete root_;
+            root_ = temp;
+        }
+            // when neither subtree is empty
+        else {
+            Node *predecessor = root_->leftChild;
+            temp = nullptr;
 
-bool RBT::search_inner(Node *node, int val) {
-    if (node==nullptr) return false;
+            // locate the predecessor to root_ to be deleted
+            while (predecessor->rightChild != nullptr) {
+                temp = predecessor;
+                predecessor = predecessor->rightChild;
+            }
 
-    if(node->data==val) return true;
+            //update root_ to delete's data with predecessor's data and set propper color
+            root_->data = predecessor->data;
+            root_->colour = originalColor;
 
-    if(val<node->data){
-        return search_inner(node->leftChild, val);
+            // update predecessor's original parent and delete predecessor from it's original position.
+            if (temp == nullptr) { // incase, predecessor was root_->lnode and no iteration was done
+                root_->leftChild = predecessor->leftChild;
+            } else {
+                temp->rightChild = predecessor->leftChild;
+            }
+            delete predecessor;
+        }
+
+        // now balance stuff
+//        if (originalColor == 'b') {
+//            dbalance(root_);
+//        }
+        return true;
     }
-    else if(val>node->data) {
-        return search_inner(node->rightChild, val);
+
+    // general case
+    if(val<root_->data){
+        return deleten_inner(root_->leftChild, val);
+    }
+    else if(val>root_->data){
+        return deleten_inner(root->rightChild, val);
     }
 }
 
-bool RBT::destroy_inner(Node *&node) {
+bool RBT::search_inner(Node *root_, int val) const{
+    if (root_ == nullptr) return false;
+
+    if (root_->data == val) return true;
+
+    if (val < root_->data) {
+        return search_inner(root_->leftChild, val);
+    } else if (val > root_->data) {
+        return search_inner(root_->rightChild, val);
+    }
+}
+
+bool RBT::destroy_inner(Node *&root_) {
     return false;
 }
 
-bool RBT::deletegt_inner(Node *&node, int val) {
+bool RBT::deletegt_inner(Node *&root_, int val) {
     return false;
 }
 
-Node* RBT::parent_inner(Node *node, int val) {
+Node *RBT::parent_inner(Node *root_, int val) const{
     // base case
-    if(root==nullptr) return nullptr;
+    if (root_ ==nullptr || root_->data==0) return nullptr;
 
     // positive result case
-    if(root->rightChild!= nullptr && root->rightChild->data==val){
-        return root->rightChild;
-    }
-    else if(root->leftChild!= nullptr && root->leftChild->data==val){
-        return root->leftChild;
-    }
+    if(root_->rightChild->data==val || root_->leftChild->data==val) return root_;
 
     //general case
-    if(val<root->data){
-        return parent_inner(root->leftChild, val);
-    }
-    else if(val>root->data){
-        return parent_inner(root->rightChild, val);
+    if (val < root_->data) {
+        return parent_inner(root_->leftChild, val);
+    } else if (val > root_->data) {
+        return parent_inner(root_->rightChild, val);
     }
 }
+
+// The usual traversals
+
+void RBT::preorder_inner(Node *root_) const{
+    if (root_) {
+        std::cout << root_->data << " ";
+        preorder_inner(root_->leftChild);
+        preorder_inner(root_->rightChild);
+    }
+}
+
+void RBT::inorder_inner(Node *root_)const {
+    if (root_ && root_->data!=0) {
+        inorder_inner(root_->leftChild);
+        std::cout << root_->data << " ";
+        inorder_inner(root_->rightChild);
+    }
+}
+
+void RBT::postorder_inner(Node *root_) const{
+    if (root_) {
+        postorder_inner(root_->leftChild);
+        postorder_inner(root_->rightChild);
+        std::cout << root_->data << " ";
+    }
+}
+
+// Alternate forms of usual traversalssss
+
+void RBT::altpreorder_inner(Node *root_) const{
+
+}
+
+void RBT::altinorder_inner(Node *root_) const{
+
+}
+
+void RBT::atlpostorder_inner(Node *root_) const{
+
+}
+
+// UTILITY FUNCTIONS
+
+Node *RBT::successor(Node *root_, int) {
+    return nullptr;
+}
+
+void RBT::recolour(Node *node) {
+
+}
+
+void RBT::lrotate(Node *node) {
+    if(node){
+        Node* nodeParent=parent(node->data);
+        Node* nodeRightChild=node->rightChild;
+
+        if(nodeRightChild){
+            node->rightChild=nodeRightChild->leftChild;
+
+            if(node!=root){
+                if(node==nodeParent->leftChild){
+                    nodeParent->leftChild=nodeRightChild;
+                }
+                else{
+                    nodeParent->rightChild=nodeRightChild;
+                }
+            }
+            else{
+                root=nodeRightChild;
+            }
+
+            nodeRightChild->leftChild=node;
+        }
+    }
+}
+
+void RBT::rrotate(Node *node) {
+    if(node){
+        Node* nodeParent=parent(node->data);
+        Node* nodeLeftChild=node->leftChild;
+
+        if(nodeLeftChild){
+            node->leftChild=nodeLeftChild->rightChild;
+
+            if(node!=root){
+                if(node==nodeParent->leftChild){
+                    nodeParent->leftChild=nodeLeftChild;
+                }
+                else{
+                    nodeParent->rightChild=nodeLeftChild;
+                }
+            }
+            else{
+                root=nodeLeftChild;
+            }
+            nodeLeftChild->rightChild=node;
+        }
+    }
+}
+
+void RBT::ibalance(Node *node) {
+
+    if(node==root){
+        root->colour='b';
+        return;
+    }
+
+    Node* currentNode=node;
+    Node* tempParent=parent(currentNode->data);
+
+    if(tempParent==root) return;
+
+    Node* tempGrandParent=parent(tempParent->data);
+    Node* tempUncle=nullptr;
+
+    while(tempParent->colour == 'r'){
+        if(tempParent == tempGrandParent->leftChild){
+            tempUncle=tempGrandParent->rightChild;
+
+            if(tempUncle->colour == 'r'){
+                tempParent->colour='b';
+                tempUncle->colour='b';
+                tempGrandParent->colour='r';
+
+                currentNode=tempGrandParent;
+            }
+            else if(currentNode == tempParent->rightChild){
+                currentNode=parent(currentNode->data);
+                lrotate(currentNode);
+            }
+            else{
+                tempParent=parent(currentNode->data);
+                tempGrandParent=parent(tempParent->data);
+
+                tempParent->colour='b';
+                tempGrandParent->colour='r';
+
+                rrotate(tempGrandParent);
+            }
+        }
+        else{
+            tempUncle=tempGrandParent->leftChild;
+
+            if(tempUncle->colour == 'r'){
+                tempParent->colour='b';
+                tempUncle->colour='b';
+                tempGrandParent->colour='r';
+
+                currentNode=tempGrandParent;
+            }
+            else if(currentNode == tempParent->leftChild){
+                currentNode=parent(currentNode->data);
+                rrotate(currentNode);
+            }
+            else{
+                tempParent=parent(currentNode->data);
+                tempGrandParent=parent(tempParent->data);
+
+                tempParent->colour='b';
+                tempGrandParent->colour='r';
+
+                lrotate(tempGrandParent);
+            }
+        }
+    }
+    root->colour='b';
+}
+
+void RBT::dbalance(Node *node) {
+
+}
+
+// DEFAULT CONSTRUCTOR
 
 RBT::RBT() {
-    root=nullptr;
+    root = nullptr;
 }
 
+
+// WRAPPER FUNCTIONS
+
 bool RBT::insert(int val) {
-    // here, third parameter, parentNode=root, is essentially meaningless and
-    // for the sake of implementation design only(
-    // since third argument is a references and references cant be null.
-    return insert_inner( val,root, root);
+    return insert_inner(root, val);
 }
 
 bool RBT::deleten(int val) {
     return deleten_inner(root, val);
 }
 
-bool RBT::search(int val) {
+bool RBT::search(int val) const{
     return search_inner(root, val);
 }
 
@@ -170,76 +338,44 @@ bool RBT::deletegt(int val) {
     return deletegt_inner(root, val);
 }
 
-bool RBT::displayParent(int val) {
+Node *RBT::parent(int val) const {
     return parent_inner(root, val);
 }
 
-void RBT::recolour(Node *&parent, Node *&child, Node *&grandchild) {
+bool RBT::displayParent(int val)const{
+    Node* parent= parent_inner(root, val);
+    if(parent){
+        cout<<parent->data;
+        return true;
+    }
+    return false;
+}
+
+void RBT::inorder() const{
+    inorder_inner(root);
+}
+
+void RBT::preorder() const{
+    postorder_inner(root);
+}
+
+void RBT::postorder() const {
 
 }
 
-void RBT::lrotate(Node *&node) {
-    Node* node_rightChild=node->rightChild;
-    Node* temp=node->rightChild->leftChild;
-    node->rightChild= temp;
-    node_rightChild->leftChild=node;
-    node=node_rightChild;
+void RBT::altpreorder() const {
+
 }
 
-void RBT::rrotate(Node *&node) {
-    Node* node_leftChild=node->leftChild;
-    node->leftChild=node_leftChild->rightChild;
-    node_leftChild->rightChild=node;
-    node=node_leftChild;
+void RBT::altinorder() const {
+
+}
+
+void RBT::altpostorder() const {
+
 }
 
 void RBT::tester() {
-    cout<<"Testing left rotate, then right rotate. JEBAIT.";
-}
-
-/* *
- * The usual traversals
- * */
-
-void RBT::preorder_inner(Node *node) {
-    if (node) {
-        std::cout << node->data << " ";
-        preorder_inner(node->leftChild);
-        preorder_inner(node->rightChild);
-    }
-}
-
-void RBT::inorder_inner(Node *node) {
-    if (node) {
-        inorder_inner(node->leftChild);
-        std::cout << node->data << " ";
-        inorder_inner(node->rightChild);
-    }
-}
-
-void RBT::postorder_inner(Node *node) {
-    if (node) {
-        postorder_inner(node->leftChild);
-        postorder_inner(node->rightChild);
-        std::cout << node->data << " ";
-    }
-}
-
-/* *
- * Alternate forms of usual traversalssss
- * */
-void RBT::altpreorder_inner(Node *node) {
-
-}
-
-void RBT::altinorder_inner(Node *node) {
-
-}
-
-void RBT::atlpostorder_inner(Node *node) {
-
-}
-
-Node *RBT::successor(Node *node, int) {
-    return nullptr;
+    cout << "Testing left rotate, then right rotate. JEBAIT.";
+    rrotate(root);
 }
