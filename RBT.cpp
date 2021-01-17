@@ -1,7 +1,6 @@
 //
 // Created by talha on 12/1/21.
 //
-
 #include "RBT.h"
 
 bool RBT::insert_inner(Node *&root_, int val) {
@@ -141,8 +140,8 @@ Node *RBT::parent_inner(Node *root_, int val) const{
 // The usual traversals
 
 void RBT::preorder_inner(Node *root_) const{
-    if (root_) {
-        std::cout << root_->data << " ";
+    if (root_ && root_->data!=0) {
+        std::cout << "("<<root_->data << ","<<root_->colour<<") ";
         preorder_inner(root_->leftChild);
         preorder_inner(root_->rightChild);
     }
@@ -151,31 +150,43 @@ void RBT::preorder_inner(Node *root_) const{
 void RBT::inorder_inner(Node *root_)const {
     if (root_ && root_->data!=0) {
         inorder_inner(root_->leftChild);
-        std::cout << root_->data << " ";
+        std::cout << "("<<root_->data << ","<<root_->colour<<") ";
         inorder_inner(root_->rightChild);
     }
 }
 
 void RBT::postorder_inner(Node *root_) const{
-    if (root_) {
+    if (root_ && root_->data!=0) {
         postorder_inner(root_->leftChild);
         postorder_inner(root_->rightChild);
-        std::cout << root_->data << " ";
+        std::cout << "("<<root_->data << ","<<root_->colour<<") ";
     }
 }
 
 // Alternate forms of usual traversalssss
 
 void RBT::altpreorder_inner(Node *root_) const{
-
+    if (root_ && root_->data!=0) {
+        std::cout << "("<<root_->data << ","<<root_->colour<<") ";
+        altpreorder_inner(root_->rightChild);
+        altpreorder_inner(root_->leftChild);
+    }
 }
 
 void RBT::altinorder_inner(Node *root_) const{
-
+    if (root_ && root_->data!=0) {
+        altinorder_inner(root_->rightChild);
+        std::cout << "("<<root_->data << ","<<root_->colour<<") ";
+        altinorder_inner(root_->leftChild);
+    }
 }
 
-void RBT::atlpostorder_inner(Node *root_) const{
-
+void RBT::altpostorder_inner(Node *root_) const{
+    if (root_ && root_->data!=0) {
+        altpostorder_inner(root_->rightChild);
+        altpostorder_inner(root_->leftChild);
+        std::cout << "("<<root_->data << ","<<root_->colour<<") ";
+    }
 }
 
 // UTILITY FUNCTIONS
@@ -356,26 +367,50 @@ void RBT::inorder() const{
 }
 
 void RBT::preorder() const{
-    postorder_inner(root);
+    preorder_inner(root);
 }
 
 void RBT::postorder() const {
-
+    postorder_inner(root);
 }
 
 void RBT::altpreorder() const {
-
+    altpreorder_inner(root);
 }
 
 void RBT::altinorder() const {
-
+    altinorder_inner(root);
 }
 
 void RBT::altpostorder() const {
-
+    altpostorder_inner(root);
 }
 
 void RBT::tester() {
     cout << "Testing left rotate, then right rotate. JEBAIT.";
-    rrotate(root);
+}
+
+/*
+ * File I/O
+ * */
+
+bool RBT::readFile(const char *fpath) {
+
+    if(fpath){
+        //open file
+        ifstream fin(fpath);
+        if(!fin.is_open()) return false;
+
+        int num;
+        while(!fin.eof()){
+            fin>>num;
+            insert_inner(root, num);
+        }
+
+        //close file
+        fin.close();
+
+        return true;
+    }
+    return false;
 }

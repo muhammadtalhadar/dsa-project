@@ -6,6 +6,7 @@
 
 #include "Node.h"
 #include <iostream>
+#include <fstream>
 using namespace std;
 class RBT {
 private:
@@ -50,7 +51,7 @@ private:
     // Alternate forms of usual traversals
     void altpreorder_inner(Node* root_)const; // NRL
     void altinorder_inner(Node* root_)const; // RNL
-    void atlpostorder_inner(Node* root_)const; // RLN
+    void altpostorder_inner(Node* root_)const; // RLN
 
     /* *
      * Utility Functions
@@ -78,6 +79,12 @@ private:
     // Tree balancing algorithms
     void ibalance(Node* node); // balance tree after insertion
     void dbalance(Node* node); // balance tree after deletion
+
+    /*
+     * File I/O
+     * */
+
+    bool readFile(const char* fpath);
 
 
 public:
