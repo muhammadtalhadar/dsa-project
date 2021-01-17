@@ -7,7 +7,9 @@
 #include "Node.h"
 #include <iostream>
 #include <fstream>
+
 using namespace std;
+
 class RBT {
 private:
     Node *root;
@@ -16,76 +18,56 @@ private:
      * Declarations for recursive implementations
      * postfix '_inner': implies that a method is a private method.
      * parameter name '_root': implies that the root of the (sub)tree must be passed to the method as argument here.
-     * '_root' parameter generally implies that the method is a recursive one.
+     * '_root' parameter and '_inner' postfix generally implies that the method is a recursive one.
      * */
 
-    /* inserts a value int RBT
-     * FIXME: Implemented without balancing.*/
+    // Insert a value into RBT and balance it.
     bool insert_inner(Node *&root_, int val);
 
-    /*
-     * Deletes a root_ from the RBT.
-     * FIXME: implmenented without balancing.
-     * */
+    // Delete a key from RBT and balance it.
     bool deleten_inner(Node *&root_, int val);
 
     // returns true if a value exists int RBT
-    bool search_inner(Node *root_, int val)const;
+    bool search_inner(Node *root_, int val) const;
 
     // destroys the entire RBT
     bool destroy_inner(Node *&root_);
 
     // deletes all nodes of value greater than a give value
-    bool deletegt_inner(Node *&root_, int val);
-
-
-    /* *
-     * Traversals
-     * */
+    bool deletegt_inner(Node *node);
 
     // The usual traversals
-    void preorder_inner(Node* root_)const; // NLR
-    void inorder_inner(Node* root_)const; // LNR
-    void postorder_inner(Node* root_)const; // LRN
+
+    void preorder_inner(Node *root_) const; // NLR
+    void inorder_inner(Node *root_) const; // LNR
+    void postorder_inner(Node *root_) const; // LRN
 
     // Alternate forms of usual traversals
-    void altpreorder_inner(Node* root_)const; // NRL
-    void altinorder_inner(Node* root_)const; // RNL
-    void altpostorder_inner(Node* root_)const; // RLN
 
-    /* *
-     * Utility Functions
-    * */
+    void altpreorder_inner(Node *root_) const; // NRL
+    void altinorder_inner(Node *root_) const; // RNL
+    void altpostorder_inner(Node *root_) const; // RLN
 
-    Node* parent_inner(Node *root_, int val)const;
-    Node* parent(int val)const;
-    Node* successor(Node *root_, int);
 
-    // Utility functions for balancing trees
+    // Locating nodes
 
-    /*
-     * 'node' is the focus of our recolouring, whose elderly and sibibling nodes will be checked for colouring.
-     * */
-    void recolour(Node* node);
+    Node *locate_inner(Node *root_, int key);
+    Node *parent_inner(Node *root_, int val) const;
+    Node *successor_inner(Node *node);
+    Node *predecessor_inner(Node* node);
+    Node *max_inner(Node *root_);
+    Node *min_inner(Node* root_);
 
-    /*
-     * For either rotation methods
-     * parameter 'node' is the pivot of the rotation.
-     * In parent-child relation of rotation, 'node' is the parent.
-     * */
-    void lrotate(Node* node); // left rotation
-    void rrotate(Node* node); // right rotation
+    Node *parent(int val) const;
+    // Rotaitons
+
+    void lrotate(Node *node); // left rotation
+    void rrotate(Node *node); // right rotation
 
     // Tree balancing algorithms
-    void ibalance(Node* node); // balance tree after insertion
-    void dbalance(Node* node); // balance tree after deletion
 
-    /*
-     * File I/O
-     * */
-
-    bool readFile(const char* fpath);
-
+    void ibalance(Node *node); // balance tree after insertion
+    void dbalance(Node *node); // balance tree after deletion
 
 public:
     // default constructor
@@ -96,21 +78,28 @@ public:
 
     bool deleten(int val);
 
-    bool search(int val)const;
+    bool search(int val) const;
 
     bool destroy();
 
     bool deletegt(int val);
 
-    bool displayParent(int val)const;
+    bool displayParent(int val) const;
 
-    void preorder()const;
-    void inorder()const;
-    void postorder()const;
+    void preorder() const;
 
-    void altpreorder()const;
-    void altinorder()const;
-    void altpostorder()const;
+    void inorder() const;
+
+    void postorder() const;
+
+    void altpreorder() const;
+
+    void altinorder() const;
+
+    void altpostorder() const;
+
+    // File IO
+    bool readFile(const char *fpath);
 
     //TODO: delete this later
     void tester();//this just tests shit

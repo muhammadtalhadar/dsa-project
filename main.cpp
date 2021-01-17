@@ -11,6 +11,10 @@ int main() {
     for(int i:nums){
        rbt.insert(i);
     }
-    cout<<"\nTEET.";
+
+    cout<<endl;
+    rbt.inorder();
+
+
     return 0;
 }

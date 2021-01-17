@@ -6,11 +6,7 @@
 bool RBT::insert_inner(Node *&root_, int val) {
 
     // base case
-    if(root==nullptr){
-        root=new Node(val, 'b', new Node(0,'b'),new Node(0,'b'));
-        return true;
-    }
-    else if(root_->data==0) {
+  if(root_->data==0) {
 
         // insert root_
         root_->data=val;
@@ -103,7 +99,7 @@ bool RBT::deleten_inner(Node *&root_, int val) {
 }
 
 bool RBT::search_inner(Node *root_, int val) const{
-    if (root_ == nullptr) return false;
+    if (root_->data == 0) return false;
 
     if (root_->data == val) return true;
 
@@ -115,11 +111,20 @@ bool RBT::search_inner(Node *root_, int val) const{
 }
 
 bool RBT::destroy_inner(Node *&root_) {
-    return false;
+    if(root_==nullptr) return false;
+
+    destroy_inner(root_->leftChild);
+    destroy_inner(root_->rightChild);
+
+    delete root_;
+    root_=nullptr;
 }
 
-bool RBT::deletegt_inner(Node *&root_, int val) {
-    return false;
+bool RBT::deletegt_inner(Node *node) {
+
+    if(node==nullptr || node->data==0) return false;
+
+    return destroy_inner(node->rightChild);
 }
 
 Node *RBT::parent_inner(Node *root_, int val) const{
@@ -191,12 +196,47 @@ void RBT::altpostorder_inner(Node *root_) const{
 
 // UTILITY FUNCTIONS
 
-Node *RBT::successor(Node *root_, int) {
-    return nullptr;
+Node *RBT::locate_inner(Node *root_, int key) {
+    if(root_->data==0) return nullptr;
+
+    if(root_->data== key) return root_;
+
+    if(key<root_->data){
+        locate_inner(root_->leftChild, key);
+    }
+    else if(key>root_->data){
+        locate_inner(root_->rightChild, key);
+    }
 }
 
-void RBT::recolour(Node *node) {
+Node* RBT::max_inner(Node *root_) {
 
+    if(root_==nullptr) return nullptr;
+
+    if(root_->rightChild->data==0) return root_;
+
+    return max_inner(root_->rightChild);
+}
+
+Node *RBT::min_inner(Node *root_) {
+
+    if(root_==nullptr) return nullptr;
+
+    if(root_->leftChild->data==0) return root_;
+
+    return min_inner(root_->leftChild);
+}
+
+Node *RBT::successor_inner(Node* node) {
+    if(node==nullptr || node->data==0) return nullptr;
+
+    return max_inner(node->leftChild);
+}
+
+Node *RBT::predecessor_inner(Node* node) {
+    if(node==nullptr || node->data==0) return nullptr;
+
+    return min_inner(node->rightChild);
 }
 
 void RBT::lrotate(Node *node) {
@@ -323,7 +363,7 @@ void RBT::dbalance(Node *node) {
 // DEFAULT CONSTRUCTOR
 
 RBT::RBT() {
-    root = nullptr;
+    root = new Node(0, 'b');
 }
 
 
@@ -346,7 +386,7 @@ bool RBT::destroy() {
 }
 
 bool RBT::deletegt(int val) {
-    return deletegt_inner(root, val);
+    return deletegt_inner(locate_inner(root, val));
 }
 
 Node *RBT::parent(int val) const {
@@ -387,7 +427,11 @@ void RBT::altpostorder() const {
 }
 
 void RBT::tester() {
-    cout << "Testing left rotate, then right rotate. JEBAIT.";
+    Node* temp=nullptr;
+    temp= max_inner(root);
+    cout<<"Max: "<<temp->data<<endl;
+    temp=successor_inner(root);
+    cout<<"Successor of Root: "<<temp->data<<endl;
 }
 
 /*
