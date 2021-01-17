@@ -58,7 +58,6 @@ private:
     Node *max_inner(Node *root_);
     Node *min_inner(Node* root_);
 
-    Node *parent(int val) const;
     // Rotaitons
 
     void lrotate(Node *node); // left rotation
@@ -84,7 +83,7 @@ public:
 
     bool deletegt(int val);
 
-    bool displayParent(int val) const;
+    bool parent(int val) const;
 
     void preorder() const;
 

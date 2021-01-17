@@ -1,5 +1,8 @@
 #pragma once
 
+#include <iostream>
+using namespace std;
+
 struct Node
 {
     int data;
@@ -7,5 +10,6 @@ struct Node
     Node* rightChild;
     char colour;
 
-    Node(int data=0, char colour='r',Node *leftChild=nullptr, Node *rightChild=nullptr);
+    explicit Node(int data=0, char colour='r',Node *leftChild=nullptr, Node *rightChild=nullptr);
+    friend ostream& operator<<(ostream &out, const Node& node);
 };

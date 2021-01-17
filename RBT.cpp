@@ -6,13 +6,13 @@
 bool RBT::insert_inner(Node *&root_, int val) {
 
     // base case
-  if(root_->data==0) {
+    if (root_->data == 0) {
 
         // insert root_
-        root_->data=val;
-        root_->colour='r';
-        root_->rightChild=new Node(0,'b');
-        root_->leftChild=new Node(0,'b');
+        root_->data = val;
+        root_->colour = 'r';
+        root_->rightChild = new Node(0, 'b');
+        root_->leftChild = new Node(0, 'b');
 
         // call balancing method at point of insertion
         ibalance(root_);
@@ -90,15 +90,14 @@ bool RBT::deleten_inner(Node *&root_, int val) {
     }
 
     // general case
-    if(val<root_->data){
+    if (val < root_->data) {
         return deleten_inner(root_->leftChild, val);
-    }
-    else if(val>root_->data){
+    } else if (val > root_->data) {
         return deleten_inner(root->rightChild, val);
     }
 }
 
-bool RBT::search_inner(Node *root_, int val) const{
+bool RBT::search_inner(Node *root_, int val) const {
     if (root_->data == 0) return false;
 
     if (root_->data == val) return true;
@@ -111,28 +110,31 @@ bool RBT::search_inner(Node *root_, int val) const{
 }
 
 bool RBT::destroy_inner(Node *&root_) {
-    if(root_==nullptr) return false;
+    if (root_ == nullptr) return false;
 
     destroy_inner(root_->leftChild);
     destroy_inner(root_->rightChild);
 
     delete root_;
-    root_=nullptr;
+    root_ = nullptr;
 }
 
 bool RBT::deletegt_inner(Node *node) {
 
-    if(node==nullptr || node->data==0) return false;
+    if (node == nullptr || node->data == 0) return false;
 
-    return destroy_inner(node->rightChild);
+    // TODO: Implement this
+    // locate nodes greated than node->data
+    // call deleten_inner() on each.
+    return false;
 }
 
-Node *RBT::parent_inner(Node *root_, int val) const{
+Node *RBT::parent_inner(Node *root_, int val) const {
     // base case
-    if (root_ ==nullptr || root_->data==0) return nullptr;
+    if (root_ == nullptr || root_->data == 0) return nullptr;
 
     // positive result case
-    if(root_->rightChild->data==val || root_->leftChild->data==val) return root_;
+    if (root_->rightChild->data == val || root_->leftChild->data == val) return root_;
 
     //general case
     if (val < root_->data) {
@@ -144,216 +146,206 @@ Node *RBT::parent_inner(Node *root_, int val) const{
 
 // The usual traversals
 
-void RBT::preorder_inner(Node *root_) const{
-    if (root_ && root_->data!=0) {
-        std::cout << "("<<root_->data << ","<<root_->colour<<") ";
+void RBT::preorder_inner(Node *root_) const {
+    if (root_ && root_->data != 0) {
+        cout << *root_ << " ";
         preorder_inner(root_->leftChild);
         preorder_inner(root_->rightChild);
     }
 }
 
-void RBT::inorder_inner(Node *root_)const {
-    if (root_ && root_->data!=0) {
+void RBT::inorder_inner(Node *root_) const {
+    if (root_ && root_->data != 0) {
         inorder_inner(root_->leftChild);
-        std::cout << "("<<root_->data << ","<<root_->colour<<") ";
+        cout << *root_ << " ";
         inorder_inner(root_->rightChild);
     }
 }
 
-void RBT::postorder_inner(Node *root_) const{
-    if (root_ && root_->data!=0) {
+void RBT::postorder_inner(Node *root_) const {
+    if (root_ && root_->data != 0) {
         postorder_inner(root_->leftChild);
         postorder_inner(root_->rightChild);
-        std::cout << "("<<root_->data << ","<<root_->colour<<") ";
+        cout << *root_ << " ";
     }
 }
 
 // Alternate forms of usual traversalssss
 
-void RBT::altpreorder_inner(Node *root_) const{
-    if (root_ && root_->data!=0) {
-        std::cout << "("<<root_->data << ","<<root_->colour<<") ";
+void RBT::altpreorder_inner(Node *root_) const {
+    if (root_ && root_->data != 0) {
+        cout << *root_ << " ";
         altpreorder_inner(root_->rightChild);
         altpreorder_inner(root_->leftChild);
     }
 }
 
-void RBT::altinorder_inner(Node *root_) const{
-    if (root_ && root_->data!=0) {
+void RBT::altinorder_inner(Node *root_) const {
+    if (root_ && root_->data != 0) {
         altinorder_inner(root_->rightChild);
-        std::cout << "("<<root_->data << ","<<root_->colour<<") ";
+        cout << *root_ << " ";
         altinorder_inner(root_->leftChild);
     }
 }
 
-void RBT::altpostorder_inner(Node *root_) const{
-    if (root_ && root_->data!=0) {
+void RBT::altpostorder_inner(Node *root_) const {
+    if (root_ && root_->data != 0) {
         altpostorder_inner(root_->rightChild);
         altpostorder_inner(root_->leftChild);
-        std::cout << "("<<root_->data << ","<<root_->colour<<") ";
+        cout << *root_ << " ";
     }
 }
 
 // UTILITY FUNCTIONS
 
 Node *RBT::locate_inner(Node *root_, int key) {
-    if(root_->data==0) return nullptr;
+    if (root_->data == 0) return nullptr;
 
-    if(root_->data== key) return root_;
+    if (root_->data == key) return root_;
 
-    if(key<root_->data){
+    if (key < root_->data) {
         locate_inner(root_->leftChild, key);
-    }
-    else if(key>root_->data){
+    } else if (key > root_->data) {
         locate_inner(root_->rightChild, key);
     }
 }
 
-Node* RBT::max_inner(Node *root_) {
+Node *RBT::max_inner(Node *root_) {
 
-    if(root_==nullptr) return nullptr;
+    if (root_ == nullptr) return nullptr;
 
-    if(root_->rightChild->data==0) return root_;
+    if (root_->rightChild->data == 0) return root_;
 
     return max_inner(root_->rightChild);
 }
 
 Node *RBT::min_inner(Node *root_) {
 
-    if(root_==nullptr) return nullptr;
+    if (root_ == nullptr) return nullptr;
 
-    if(root_->leftChild->data==0) return root_;
+    if (root_->leftChild->data == 0) return root_;
 
     return min_inner(root_->leftChild);
 }
 
-Node *RBT::successor_inner(Node* node) {
-    if(node==nullptr || node->data==0) return nullptr;
+Node *RBT::successor_inner(Node *node) {
+    if (node == nullptr || node->data == 0) return nullptr;
 
     return max_inner(node->leftChild);
 }
 
-Node *RBT::predecessor_inner(Node* node) {
-    if(node==nullptr || node->data==0) return nullptr;
+Node *RBT::predecessor_inner(Node *node) {
+    if (node == nullptr || node->data == 0) return nullptr;
 
     return min_inner(node->rightChild);
 }
 
 void RBT::lrotate(Node *node) {
-    if(node){
-        Node* nodeParent=parent(node->data);
-        Node* nodeRightChild=node->rightChild;
+    if (node) {
+        Node *nodeParent = parent_inner(root, node->data);
+        Node *nodeRightChild = node->rightChild;
 
-        if(nodeRightChild){
-            node->rightChild=nodeRightChild->leftChild;
+        if (nodeRightChild) {
+            node->rightChild = nodeRightChild->leftChild;
 
-            if(node!=root){
-                if(node==nodeParent->leftChild){
-                    nodeParent->leftChild=nodeRightChild;
+            if (node != root) {
+                if (node == nodeParent->leftChild) {
+                    nodeParent->leftChild = nodeRightChild;
+                } else {
+                    nodeParent->rightChild = nodeRightChild;
                 }
-                else{
-                    nodeParent->rightChild=nodeRightChild;
-                }
-            }
-            else{
-                root=nodeRightChild;
+            } else {
+                root = nodeRightChild;
             }
 
-            nodeRightChild->leftChild=node;
+            nodeRightChild->leftChild = node;
         }
     }
 }
 
 void RBT::rrotate(Node *node) {
-    if(node){
-        Node* nodeParent=parent(node->data);
-        Node* nodeLeftChild=node->leftChild;
+    if (node) {
+        Node *nodeParent = parent_inner(root, node->data);
+        Node *nodeLeftChild = node->leftChild;
 
-        if(nodeLeftChild){
-            node->leftChild=nodeLeftChild->rightChild;
+        if (nodeLeftChild) {
+            node->leftChild = nodeLeftChild->rightChild;
 
-            if(node!=root){
-                if(node==nodeParent->leftChild){
-                    nodeParent->leftChild=nodeLeftChild;
+            if (node != root) {
+                if (node == nodeParent->leftChild) {
+                    nodeParent->leftChild = nodeLeftChild;
+                } else {
+                    nodeParent->rightChild = nodeLeftChild;
                 }
-                else{
-                    nodeParent->rightChild=nodeLeftChild;
-                }
+            } else {
+                root = nodeLeftChild;
             }
-            else{
-                root=nodeLeftChild;
-            }
-            nodeLeftChild->rightChild=node;
+            nodeLeftChild->rightChild = node;
         }
     }
 }
 
 void RBT::ibalance(Node *node) {
 
-    if(node==root){
-        root->colour='b';
+    if (node == root) {
+        root->colour = 'b';
         return;
     }
 
-    Node* currentNode=node;
-    Node* tempParent=parent(currentNode->data);
+    Node *currentNode = node;
+    Node *tempParent = parent_inner(root, currentNode->data);
 
-    if(tempParent==root) return;
+    if (tempParent == root) return;
 
-    Node* tempGrandParent=parent(tempParent->data);
-    Node* tempUncle=nullptr;
+    Node *tempGrandParent = parent_inner(root, tempParent->data);
+    Node *tempUncle = nullptr;
 
-    while(tempParent->colour == 'r'){
-        if(tempParent == tempGrandParent->leftChild){
-            tempUncle=tempGrandParent->rightChild;
+    while (tempParent->colour == 'r') {
+        if (tempParent == tempGrandParent->leftChild) {
+            tempUncle = tempGrandParent->rightChild;
 
-            if(tempUncle->colour == 'r'){
-                tempParent->colour='b';
-                tempUncle->colour='b';
-                tempGrandParent->colour='r';
+            if (tempUncle->colour == 'r') {
+                tempParent->colour = 'b';
+                tempUncle->colour = 'b';
+                tempGrandParent->colour = 'r';
 
-                currentNode=tempGrandParent;
-            }
-            else if(currentNode == tempParent->rightChild){
-                currentNode=parent(currentNode->data);
+                currentNode = tempGrandParent;
+            } else if (currentNode == tempParent->rightChild) {
+                currentNode = parent_inner(root, currentNode->data);
                 lrotate(currentNode);
-            }
-            else{
-                tempParent=parent(currentNode->data);
-                tempGrandParent=parent(tempParent->data);
+            } else {
+                tempParent = parent_inner(root, currentNode->data);
+                tempGrandParent = parent_inner(root, tempParent->data);
 
-                tempParent->colour='b';
-                tempGrandParent->colour='r';
+                tempParent->colour = 'b';
+                tempGrandParent->colour = 'r';
 
                 rrotate(tempGrandParent);
             }
-        }
-        else{
-            tempUncle=tempGrandParent->leftChild;
+        } else {
+            tempUncle = tempGrandParent->leftChild;
 
-            if(tempUncle->colour == 'r'){
-                tempParent->colour='b';
-                tempUncle->colour='b';
-                tempGrandParent->colour='r';
+            if (tempUncle->colour == 'r') {
+                tempParent->colour = 'b';
+                tempUncle->colour = 'b';
+                tempGrandParent->colour = 'r';
 
-                currentNode=tempGrandParent;
-            }
-            else if(currentNode == tempParent->leftChild){
-                currentNode=parent(currentNode->data);
+                currentNode = tempGrandParent;
+            } else if (currentNode == tempParent->leftChild) {
+                currentNode = parent_inner(root, currentNode->data);
                 rrotate(currentNode);
-            }
-            else{
-                tempParent=parent(currentNode->data);
-                tempGrandParent=parent(tempParent->data);
+            } else {
+                tempParent = parent_inner(root, currentNode->data);
+                tempGrandParent = parent_inner(root, tempParent->data);
 
-                tempParent->colour='b';
-                tempGrandParent->colour='r';
+                tempParent->colour = 'b';
+                tempGrandParent->colour = 'r';
 
                 lrotate(tempGrandParent);
             }
         }
     }
-    root->colour='b';
+    root->colour = 'b';
 }
 
 void RBT::dbalance(Node *node) {
@@ -377,7 +369,7 @@ bool RBT::deleten(int val) {
     return deleten_inner(root, val);
 }
 
-bool RBT::search(int val) const{
+bool RBT::search(int val) const {
     return search_inner(root, val);
 }
 
@@ -389,24 +381,21 @@ bool RBT::deletegt(int val) {
     return deletegt_inner(locate_inner(root, val));
 }
 
-Node *RBT::parent(int val) const {
-    return parent_inner(root, val);
-}
 
-bool RBT::displayParent(int val)const{
-    Node* parent= parent_inner(root, val);
-    if(parent){
-        cout<<parent->data;
+bool RBT::parent(int val) const {
+    Node *parent = parent_inner(root, val);
+    if (parent) {
+        cout << *parent;
         return true;
     }
     return false;
 }
 
-void RBT::inorder() const{
+void RBT::inorder() const {
     inorder_inner(root);
 }
 
-void RBT::preorder() const{
+void RBT::preorder() const {
     preorder_inner(root);
 }
 
@@ -427,11 +416,11 @@ void RBT::altpostorder() const {
 }
 
 void RBT::tester() {
-    Node* temp=nullptr;
-    temp= max_inner(root);
-    cout<<"Max: "<<temp->data<<endl;
-    temp=successor_inner(root);
-    cout<<"Successor of Root: "<<temp->data<<endl;
+    Node *temp = nullptr;
+    temp = max_inner(root);
+    cout << "Max: " << temp->data << endl;
+    temp = successor_inner(root);
+    cout << "Successor of Root: " << temp->data << endl;
 }
 
 /*
@@ -440,14 +429,14 @@ void RBT::tester() {
 
 bool RBT::readFile(const char *fpath) {
 
-    if(fpath){
+    if (fpath) {
         //open file
         ifstream fin(fpath);
-        if(!fin.is_open()) return false;
+        if (!fin.is_open()) return false;
 
         int num;
-        while(!fin.eof()){
-            fin>>num;
+        while (!fin.eof()) {
+            fin >> num;
             insert_inner(root, num);
         }
 
