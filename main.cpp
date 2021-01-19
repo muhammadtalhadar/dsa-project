@@ -29,12 +29,11 @@ int getInput(){
     return n;
 }
 
-
-int main() {
+void RBT_menu(RBT& rbt){
     int choice=0;
-    RBT rbt;
 
     menu();
+    cout<<endl<<"Press a key. ";
     choice=getInput();
 
     while(choice!=14){
@@ -88,5 +87,18 @@ int main() {
         cout<<endl<<"Press a key. ";
         choice=getInput();
     }
+}
+int main() {
+    int choice=0;
+    RBT rbt;
+
+//    int nums[]={10,20,30,40,50,60,70,80,90,100,110,120,15,13,115,5,6};
+//
+//    for(int i:nums){
+//        rbt.insert(i);
+//        cout<<"inserted "<<i<<endl;
+//    }
+//
+//    rbt.inorder();
     return 0;
 }

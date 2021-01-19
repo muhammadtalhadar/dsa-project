@@ -303,6 +303,8 @@ void RBT::ibalance(Node *node) {
                 grandParent->colour = 'r';
 
                 node = grandParent;
+                parent=parent_inner(root, node->data);
+
             } else {
                 if (node == parent->rightChild) {
                     node=parent;
@@ -324,6 +326,7 @@ void RBT::ibalance(Node *node) {
                 grandParent->colour = 'r';
 
                 node = grandParent;
+                parent=parent_inner(root, node->data);
             }
             else {
                 if (node == parent->leftChild) {
