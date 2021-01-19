@@ -14,6 +14,7 @@ int main() {
         cout<<"Inserted "<<i<<endl;
     }
 
+    //rbt.tester();
     rbt.inorder();
 
     return 0;

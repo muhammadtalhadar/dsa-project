@@ -127,7 +127,7 @@ bool RBT::deletegt_inner(Node *node) {
 
 Node *RBT::parent_inner(Node *root_, int val) const {
     // base case
-    if (root_ == nullptr) return nullptr;
+    if (root_ == nullptr || val==root->data) return nullptr;
 
     // positive result case
     if (root_->rightChild && root_->rightChild->data == val ||root->leftChild && root_->leftChild->data == val) return root_;
@@ -237,46 +237,49 @@ Node *RBT::predecessor_inner(Node *node) {
 }
 
 void RBT::lrotate(Node *node) {
-    if (node) {
-        Node *nodeParent = parent_inner(root, node->data);
-        Node *nodeRightChild = node->rightChild;
+    if(node){
+        Node* parent=parent_inner(root, node->data);
+        Node* rightChild=node->rightChild;
 
-        if (nodeRightChild) {
-            node->rightChild = nodeRightChild->leftChild;
+        if(rightChild){
+            node->rightChild=rightChild->leftChild;
+            rightChild->leftChild=node;
 
-            if (node != root) {
-                if (node == nodeParent->leftChild) {
-                    nodeParent->leftChild = nodeRightChild;
-                } else {
-                    nodeParent->rightChild = nodeRightChild;
-                }
-            } else {
-                root = nodeRightChild;
+            if(node==root){
+                root=rightChild;
             }
-
-            nodeRightChild->leftChild = node;
+            else{
+                if(node==parent->rightChild){
+                    parent->rightChild=rightChild;
+                }
+                else{
+                    parent->leftChild=rightChild;
+                }
+            }
         }
     }
 }
 
 void RBT::rrotate(Node *node) {
-    if (node) {
-        Node *nodeParent = parent_inner(root, node->data);
-        Node *nodeLeftChild = node->leftChild;
+    if(node){
+        Node* parent=parent_inner(root, node->data);
+        Node* leftChild=node->leftChild;
 
-        if (nodeLeftChild) {
-            node->leftChild = nodeLeftChild->rightChild;
+        if(leftChild){
+            node->leftChild=leftChild->rightChild;
+            leftChild->rightChild=node;
 
-            if (node != root) {
-                if (node == nodeParent->leftChild) {
-                    nodeParent->leftChild = nodeLeftChild;
-                } else {
-                    nodeParent->rightChild = nodeLeftChild;
-                }
-            } else {
-                root = nodeLeftChild;
+            if(node==root){
+                root=leftChild;
             }
-            nodeLeftChild->rightChild = node;
+            else{
+                if(node==parent->leftChild){
+                    parent->leftChild=leftChild;
+                }
+                else{
+                    parent->rightChild=leftChild;
+                }
+            }
         }
     }
 }
@@ -287,7 +290,7 @@ void RBT::ibalance(Node *node) {
     Node *grandParent=nullptr;
     Node *uncle = nullptr;
 
-    while (parent->colour == 'r') {
+    while (parent && parent->colour == 'r') {
 
         grandParent = parent_inner(root, parent->data);
 
@@ -406,11 +409,7 @@ void RBT::altpostorder() const {
 }
 
 void RBT::tester() {
-    Node *temp = nullptr;
-    temp = max_inner(root);
-    cout << "Max: " << temp->data << endl;
-    temp = successor_inner(root);
-    cout << "Successor of Root: " << temp->data << endl;
+    rrotate(root->leftChild);
 }
 
 /*
