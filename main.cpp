@@ -4,15 +4,12 @@ using namespace  std;
 
 int main() {
     std::cout << "Hello, World!" << std::endl;
-    int nums[]={33,13,53,41,61,11,21,15,31};
+
+    char path[]={"input.txt"};
 
     RBT rbt;
+    rbt.readFile(path);
 
-    for(int i:nums){
-       rbt.insert(i);
-    }
-
-    cout<<endl;
     rbt.inorder();
 
 

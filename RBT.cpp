@@ -432,7 +432,9 @@ bool RBT::readFile(const char *fpath) {
     if (fpath) {
         //open file
         ifstream fin(fpath);
-        if (!fin.is_open()) return false;
+
+        if (!fin.is_open())
+            return false;
 
         int num;
         while (!fin.eof()) {
