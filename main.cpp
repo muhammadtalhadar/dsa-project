@@ -39,10 +39,17 @@ int main() {
 
     while(choice!=14){
         if(choice==1){
+            cout<<endl<<"Enter value to insert. ";
             rbt.insert(getInput());
         }
         else if(choice==3){
-            rbt.search(getInput());
+            cout<<endl<<"Enter value to search. ";
+            if(            rbt.search(getInput())){
+                cout<<"FOUND."<<endl;
+            }
+            else{
+                cout<<"no found :("<<endl;
+            }
         }
         else if(choice==4){
             rbt.preorder();
@@ -63,18 +70,22 @@ int main() {
             rbt.altpostorder();
         }
         else if(choice==10){
+            cout<<endl<<"Destroying tree..."<<endl;
             rbt.destroy();
         }
         else if(choice==12){
+            cout<<endl<<"Enter key to find it's parent. "<<endl;
             rbt.parent(getInput());
         }
         else if(choice==13){
+            cout<<endl<<"Reading from file..."<<endl;
             rbt.readFile("input.txt");
         }
         else {
-            break;
+            cout<<endl<<"Implementation not found!"<<endl;
         }
 
+        cout<<endl<<"Press a key. ";
         choice=getInput();
     }
     return 0;
