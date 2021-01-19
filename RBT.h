@@ -100,6 +100,4 @@ public:
     // File IO
     bool readFile(const char *fpath);
 
-    //TODO: delete this later
-    void tester();//this just tests shit
 };

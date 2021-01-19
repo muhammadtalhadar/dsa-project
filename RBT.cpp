@@ -410,10 +410,6 @@ void RBT::altpostorder() const {
     altpostorder_inner(root);
 }
 
-void RBT::tester() {
-    rrotate(root->leftChild);
-}
-
 /*
  * File I/O
  * */
