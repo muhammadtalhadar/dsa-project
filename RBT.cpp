@@ -130,7 +130,7 @@ Node *RBT::parent_inner(Node *root_, int val) const {
     if (root_ == nullptr || val==root->data) return nullptr;
 
     // positive result case
-    if (root_->rightChild && root_->rightChild->data == val ||root->leftChild && root_->leftChild->data == val) return root_;
+    if (root_->rightChild && root_->rightChild->data == val || root_->leftChild && root_->leftChild->data == val) return root_;
 
     //general case
     if (val < root_->data) {
@@ -305,11 +305,12 @@ void RBT::ibalance(Node *node) {
                 node = grandParent;
             } else {
                 if (node == parent->rightChild) {
-                    node = parent;
+                    node=parent;
                     lrotate(node);
                 }
 
-                parent->colour = 'b';
+                parent=parent_inner(root, node->data);
+                parent->colour='b';
                 grandParent->colour = 'r';
 
                 rrotate(grandParent);
@@ -330,8 +331,9 @@ void RBT::ibalance(Node *node) {
                     rrotate(node);
                 }
 
-                parent->colour = 'b';
-                grandParent->colour = 'r';
+                parent=parent_inner(root, node->data);
+                parent->colour='b';
+                grandParent->colour='r';
                 lrotate(grandParent);
 
             }
