@@ -71,7 +71,7 @@ private:
 public:
     // default constructor
     RBT();
-
+    ~RBT();
     // declarations for wrapper functions of recursive implementations
     bool insert(int val);
 

@@ -440,3 +440,7 @@ bool RBT::readFile(const char *fpath) {
     }
     return false;
 }
+
+RBT::~RBT() {
+    destroy_inner(root);
+}
